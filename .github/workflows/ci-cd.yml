@@ -1,57 +1,48 @@
-name: CI/CD Pipeline
+name: Infracost Cost Estimation
 
 on:
   pull_request:
-    branches: [ main ]
-    types: [ opened, synchronize ]
-
-permissions:
-  contents: write
+    branches: [ main, master ]
+    types: [ opened, synchronize, reopened ]
 
 jobs:
-  lint:
+  cost-estimate:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - name: Install dependencies
-        run: npm install
-      - name: Run linter
-        run: npm run lint
-        # If you haven't set up ESLint yet, see https://eslint.org/docs/latest/user-guide/getting-started
+    - name: Setup Infracost
+      uses: infracost/actions/setup@v3
+      with:
+        api-key: ${{ secrets.INFRACOST_API_KEY }}
 
-  security-scan:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - name: Install dependencies
-        run: npm install
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: javascript
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+    - name: Checkout base branch
+      uses: actions/checkout@v4
+      with:
+        ref: '${{ github.event.pull_request.base.ref }}'
 
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - name: Install dependencies
-        run: npm install
-      - name: Run tests
-        run: npm test
+    - name: Generate Infracost cost estimate baseline
+      run: |
+        infracost breakdown --path=. \
+                            --format=json \
+                            --out-file=/tmp/infracost-base.json
+
+    - name: Checkout PR branch
+      uses: actions/checkout@v4
+
+    - name: Generate Infracost diff
+      run: |
+        infracost diff --path=. \
+                        --format=json \
+                        --compare-to=/tmp/infracost-base.json \
+                        --out-file=/tmp/infracost.json
+
+    - name: Post Infracost comment
+      run: |
+        infracost comment github --path=/tmp/infracost.json \
+                                 --repo=$GITHUB_REPOSITORY \
+                                 --github-token=${{ github.token }} \
+                                 --pull-request=${{ github.event.pull_request.number }} \
+                                 --behavior=update
