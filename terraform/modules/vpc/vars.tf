@@ -1,3 +1,13 @@
+variable "aws_region" {
+  description = "AWS Resource Region"
+  type = string
+}
+
+variable "assume_role_arn" {
+  description = "AWS Assume Role ARN"
+  type = string
+}
+
 variable "name" {
     description = "VPC name"
     type = string
