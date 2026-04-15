@@ -10,3 +10,6 @@ terraform {
     }
   }
 }
+terraform {
+  backend "local" {}
+}
