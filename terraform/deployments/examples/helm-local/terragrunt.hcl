@@ -1,9 +1,8 @@
 terraform {
-    source = "../../../modules/helm-release"
+    source = "../../../modules/helm-release/helm-local"
 }
 
 inputs = {
-    ecr_region = null
     cluster_name = "my-example-cluster"
     name = "my-example-ecr"
     chart_name = "ecr-sync"

@@ -8,11 +8,10 @@ locals {
 }
 
 terraform {
-  source = "../../../../terraform/modules/helm-release"
+  source = "../../../../terraform/modules/helm-release/helm-local"
 }
 
 inputs = {
-  ecr_region = null   # THIS enables local mode
 
   name            = local.shared.name
   chart_name      = local.shared.chart_name
