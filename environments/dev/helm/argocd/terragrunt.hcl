@@ -4,21 +4,20 @@ include "root" {
 }
 
 locals {
-    shared = include.root.locals  
+  shared = include.root.locals
 }
 
 terraform {
-  source = "../../../../terraform/modules/helm-release"
+  source = "../../../../terraform/modules/helm-release/helm-local"
 }
 
 inputs = {
-  ecr_region = null   # THIS enables local mode
 
-  name       = local.shared.name
-  chart      = local.shared.chart_name
-  namespace  = local.shared.namespace
-  repository = local.shared.chart_repo
-  version    = local.shared.chart_version
+  name            = local.shared.name
+  chart_name      = local.shared.chart_name
+  namespace       = local.shared.namespace
+  chart_repo      = local.shared.chart_repo
+  chart_version   = local.shared.chart_version
 
   values = [
     <<EOF
