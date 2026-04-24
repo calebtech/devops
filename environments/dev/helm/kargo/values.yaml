@@ -1,0 +1,5 @@
+api: 
+  service: 
+    type: ClusterIP
+  secret: 
+    name: kargo-api-secret

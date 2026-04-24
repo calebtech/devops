@@ -13,11 +13,11 @@ terraform {
 
 inputs = {
 
-  name            = local.shared.argocd_name
-  chart_name      = local.shared.argocd_chart_name
-  namespace       = local.shared.argocd_namespace
-  chart_repo      = local.shared.argocd_chart_repo
-  chart_version   = local.shared.argocd_chart_version
+  name            = local.shared.kargo_name
+  chart_name      = local.shared.kargo_chart_name
+  namespace       = local.shared.kargo_namespace
+  chart_repo      = local.shared.kargo_chart_repo
+  chart_version   = local.shared.kargo_chart_version
 
   values = [templatefile("values.yaml", {})]
 }
