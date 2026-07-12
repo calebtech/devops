@@ -1,12 +1,20 @@
 locals {
+    # For local deployments
   environment = "dev"
-  # For local deployments
+
   ## ArgoCD Configs
   argocd_name            = "argocd"
   argocd_namespace       = "argocd"
   argocd_chart_repo      = "https://argoproj.github.io/argo-helm"
   argocd_chart_name      = "argo-cd"
   argocd_chart_version   = "10.1.3"
+
+  ##Argo Rollouts Configs
+  argo_rollouts_name            = "argo-rollouts"
+  argo_rollouts_namespace       = "argo-rollouts"
+  argo_rollouts_chart_repo      = "https://argoproj.github.io/argo-helm"
+  argo_rollouts_chart_name      = "argo-rollouts"
+  argo_rollouts_chart_version   = "2.41.0"
 
   ## Kargo Configs
   kargo_name            = "kargo"
