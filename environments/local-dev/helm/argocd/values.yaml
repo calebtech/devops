@@ -8,3 +8,6 @@ server:
 configs:
   params:
     server.insecure: true
+    # Let Argo CD manage Applications outside the argocd namespace
+    # (release-templates creates each app's Application in the app's own namespace).
+    application.namespaces: "*"
