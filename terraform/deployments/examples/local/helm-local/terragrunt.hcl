@@ -1,5 +1,5 @@
 terraform {
-    source = "../../../modules/helm-release/helm-local"
+    source = "../../../../modules/helm-release/helm-local"
 }
 
 inputs = {
