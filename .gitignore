@@ -1,5 +1,17 @@
+# Terraform / Terragrunt
 .terragrunt-cache
+.terraform/
 .terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+crash.log
 .infracost
+
+# Never commit cloud credentials (GCP uses ADC / impersonation, AWS uses assumed roles)
+*service_account*.json
+*-key.json
+
+# Editors / OS
 .idea
 .DS_Store
+

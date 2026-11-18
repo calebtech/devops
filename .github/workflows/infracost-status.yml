@@ -1,0 +1,18 @@
+# Infracost v2 - marks the PR's estimate as merged or closed in Infracost Cloud.
+# Docs: https://www.infracost.io/docs/integrations/github_actions/
+name: Infracost status
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    container: ghcr.io/infracost/ci:2
+    env:
+      INFRACOST_CLI_AUTHENTICATION_TOKEN: ${{ secrets.INFRACOST_CLI_AUTHENTICATION_TOKEN }}
+      STATUS: ${{ github.event.pull_request.merged && 'MERGED' || 'CLOSED' }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: infracost-ci status --status "${STATUS}"

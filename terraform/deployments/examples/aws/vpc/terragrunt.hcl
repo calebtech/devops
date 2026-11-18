@@ -1,5 +1,5 @@
 terraform {
-    source = "../../../modules/vpc"
+    source = "../../../../modules/aws/vpc"
 }
 
 inputs = {

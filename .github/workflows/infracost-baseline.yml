@@ -1,0 +1,17 @@
+# Infracost v2 - keeps the default-branch baseline up to date in Infracost Cloud.
+# Docs: https://www.infracost.io/docs/integrations/github_actions/
+name: Infracost baseline
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  infracost:
+    runs-on: ubuntu-latest
+    container: ghcr.io/infracost/ci:2
+    env:
+      INFRACOST_CLI_AUTHENTICATION_TOKEN: ${{ secrets.INFRACOST_CLI_AUTHENTICATION_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: infracost-ci scan --path .
